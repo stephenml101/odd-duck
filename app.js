@@ -124,6 +124,13 @@ function handleImageClick(event) {
   // TODO: Once voting is complete, stop the click event 
   if (votingRounds === 0) {
     imgContainer.removeEventListener('click', handleImageClick);
+
+    //******LOCAL STORAGE******/
+    // ! STEP 1 - CONVERT OUR DATA TO A STRING TO STORE IN LOCAL STORAGE
+    let stringData = JSON.stringify(oddProductArray);
+    console.log(stringData);
+    // ! STEP 2 - SET STRINGIFIED PRODUCTS INTO LOCAL STORAGE
+    localStorage.setItem('myProducts',stringData);
   }
 }
 
@@ -135,6 +142,20 @@ function handleShowResults() {
 }
 
 // ********** EXECUTABLE CODE **********
+
+// ******** LOCALS STORAGE CONTINUES... ******
+
+// ! STEP 3 - GET INFO FROM LOCAL STORAGE
+
+let retreivedProducts = localStorage.getItem('myProducts');
+
+console.log('Products from LS >>>',retreivedProducts);
+
+// ! STEP 4  - CONVERT BACK TO USEABLE CODE
+
+let parsedProducts = JSON.parse(retreivedProducts);
+console.log('Parsed Products >>>>',parsedProducts)
+
 let bag = new Odd('bag');
 let banana = new Odd('banana');
 let bathroom = new Odd('bathroom');
@@ -156,6 +177,33 @@ let waterCan = new Odd('water-can');
 let wineGlass = new Odd('wine-glass');
 
 oddProductArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
+
+// ***** EASY PATH OUT OF THE WOODS ********
+if(retreivedProducts){
+oddProductArray = parsedProducts;
+} else {
+  let bag = new Odd('bag');
+let banana = new Odd('banana');
+let bathroom = new Odd('bathroom');
+let boots = new Odd('boots');
+let breakfast = new Odd('breakfast');
+let bubblegum = new Odd('bubblegum');
+let chair = new Odd('chair');
+let cthulhu = new Odd('cthulhu');
+let dogDuck = new Odd('dog-duck');
+let dragon = new Odd('dragon');
+let pen = new Odd('pen');
+let petSweep = new Odd('pet-sweep');
+let scissors = new Odd('scissors');
+let shark = new Odd('shark');
+let sweep = new Odd('sweep', 'png');
+let tauntaun = new Odd('tauntaun');
+let unicorn = new Odd('unicorn');
+let waterCan = new Odd('water-can');
+let wineGlass = new Odd('wine-glass');
+
+oddProductArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
+}
 
 renderImg();
 

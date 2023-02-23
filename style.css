@@ -13,6 +13,9 @@ h1 {
   font-size: 4em;
   padding: 50px;
   margin-bottom: 50px;
+  animation-name: rainbow-text;
+  animation-duration: 13s;
+  animation-iteration-count: infinite;
 }
 
 h2{
