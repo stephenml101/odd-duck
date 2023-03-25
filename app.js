@@ -3,11 +3,11 @@ console.log('hello world');
 
 // ********** GLOBAL VARIABLES **********
 
-let oddProductArray = [];
+let prodArray = [];
 let votingRounds = 25;
 let indexArray = [];
 
-// ********** WINDOWS INTO THAT DOM **********
+// ********** DOM WINDOWS **********
 
 let imgContainer = document.getElementById('img-container');
 let imgOne = document.getElementById('img-one');
@@ -20,7 +20,7 @@ let resultsBtn = document.getElementById('show-results-btn');
 let ctx = document.getElementById('my-chart');
 
 // ********** CONSTRUCTOR FUNCTIONS **********
-function Odd(name, fileExtension = 'jpg') {
+function Product(name, fileExtension = 'jpg') {
   this.name = name;
   this.image = `img/${name}.${fileExtension}`;
   this.views = 0;
@@ -33,10 +33,10 @@ function renderChart() {
   let prodVotes = [];
   let prodViews = [];
 
-  for (let i = 0; i < oddProductArray.length; i++) {
-    prodNames.push(oddProductArray[i].name);
-    prodVotes.push(oddProductArray[i].votes);
-    prodViews.push(oddProductArray[i].views);
+  for (let i = 0; i < prodArray.length; i++) {
+    prodNames.push(prodArray[i].name);
+    prodVotes.push(prodArray[i].votes);
+    prodViews.push(prodArray[i].views);
   }
 
   let chartObj = {
@@ -46,16 +46,16 @@ function renderChart() {
       datasets: [{
         label: '# of Views',
         data: prodViews,
-        borderWidth: 5,
-        backgroundColor: ['blue'],
-        borderColor: ['orange']
+        borderWidth: 2,
+        backgroundColor: ['black'],
+        borderColor: ['pink']
       },
       {
         label: '# of Votes',
         data: prodVotes,
-        borderWidth: 5,
-        backgroundColor: ['orange'],
-        borderColor: ['blue']
+        borderWidth: 2,
+        backgroundColor: ['pink'],
+        borderColor: ['black']
       }]
     },
     options: {
@@ -87,24 +87,24 @@ function renderImg() {
   let imgThreeIndex = indexArray.shift();
 
   // mapping
-  imgOne.src = oddProductArray[imgOneIndex].image;
-  imgOne.title = oddProductArray[imgOneIndex].name;
-  imgOne.alt = `this is an image of ${oddProductArray[imgOneIndex].name}`;
-  imgTwo.src = oddProductArray[imgTwoIndex].image;
-  imgTwo.title = oddProductArray[imgTwoIndex].name;
-  imgTwo.alt = `this is an image of ${oddProductArray[imgTwoIndex].name}`;
-  imgThree.src = oddProductArray[imgThreeIndex].image;
-  imgThree.title = oddProductArray[imgThreeIndex].name;
-  imgThree.alt = `this is an image of ${oddProductArray[imgThreeIndex].name}`;
+  imgOne.src = prodArray[imgOneIndex].image;
+  imgOne.title = prodArray[imgOneIndex].name;
+  imgOne.alt = `this is an image of ${prodArray[imgOneIndex].name}`;
+  imgTwo.src = prodArray[imgTwoIndex].image;
+  imgTwo.title = prodArray[imgTwoIndex].name;
+  imgTwo.alt = `this is an image of ${prodArray[imgTwoIndex].name}`;
+  imgThree.src = prodArray[imgThreeIndex].image;
+  imgThree.title = prodArray[imgThreeIndex].name;
+  imgThree.alt = `this is an image of ${prodArray[imgThreeIndex].name}`;
 
   // TODO: Increase the number of views
-  oddProductArray[imgOneIndex].views++;
-  oddProductArray[imgTwoIndex].views++;
-  oddProductArray[imgThreeIndex].views++;
+  prodArray[imgOneIndex].views++;
+  prodArray[imgTwoIndex].views++;
+  prodArray[imgThreeIndex].views++;
 }
 // gets a random image from the prod array by index number
 function getRandomIndex() {
-  return Math.floor(Math.random() * oddProductArray.length);
+  return Math.floor(Math.random() * prodArray.length);
 }
 
 // ********** EVENT HANDLERS **********
@@ -113,24 +113,24 @@ function handleImageClick(event) {
   let imgClicked = event.target.title;
   console.dir(imgClicked); //print the title of the clicked image in console
   // TODO: Increase the number of clicks on the image
-  for (let i = 0; i < oddProductArray.length; i++) {
-    if (imgClicked === oddProductArray[i].name) {
-      oddProductArray[i].votes++;
+  for (let i = 0; i < prodArray.length; i++) {
+    if (imgClicked === prodArray[i].name) {
+      prodArray[i].votes++;
       votingRounds--;
       renderImg();
     }
   }
 
-  // TODO: Once voting is complete, stop the click event 
+  // TODO: Once voting is complete, stop the click event from bubbling up
+  // ********** LOCAL STORAGE STARTS HERE **********
+  // TODO: Convert our data to a string and store it in local storage
   if (votingRounds === 0) {
     imgContainer.removeEventListener('click', handleImageClick);
+    let stringifiedProducts = JSON.stringify(prodArray);
+    console.log('stringified product list >>>', stringifiedProducts);
 
-    //******LOCAL STORAGE******/
-    // ! STEP 1 - CONVERT OUR DATA TO A STRING TO STORE IN LOCAL STORAGE
-    let stringData = JSON.stringify(oddProductArray);
-    console.log(stringData);
-    // ! STEP 2 - SET STRINGIFIED PRODUCTS INTO LOCAL STORAGE
-    localStorage.setItem('myProducts',stringData);
+    // TODO: Set stringifiedProducts to local storage
+    localStorage.setItem('prodArray', stringifiedProducts);
   }
 }
 
@@ -141,69 +141,58 @@ function handleShowResults() {
   }
 }
 
+
+
 // ********** EXECUTABLE CODE **********
 
-// ******** LOCALS STORAGE CONTINUES... ******
+// ********** Local Storage Continues Here **********
+// TODO: Get the stringifiedProducts from local storage
+let retrievedProducts = localStorage.getItem('prodArray');
+console.log('Product List from Local Storage >>>', retrievedProducts);
+// TODO: Convert back to usable code
+let parsedProducts = JSON.parse(retrievedProducts);
+console.log('My Parsed Product List >>>', parsedProducts);
 
-// ! STEP 3 - GET INFO FROM LOCAL STORAGE
-
-let retreivedProducts = localStorage.getItem('myProducts');
-
-console.log('Products from LS >>>',retreivedProducts);
-
-// ! STEP 4  - CONVERT BACK TO USEABLE CODE
-
-let parsedProducts = JSON.parse(retreivedProducts);
-console.log('Parsed Products >>>>',parsedProducts)
-
-let bag = new Odd('bag');
-let banana = new Odd('banana');
-let bathroom = new Odd('bathroom');
-let boots = new Odd('boots');
-let breakfast = new Odd('breakfast');
-let bubblegum = new Odd('bubblegum');
-let chair = new Odd('chair');
-let cthulhu = new Odd('cthulhu');
-let dogDuck = new Odd('dog-duck');
-let dragon = new Odd('dragon');
-let pen = new Odd('pen');
-let petSweep = new Odd('pet-sweep');
-let scissors = new Odd('scissors');
-let shark = new Odd('shark');
-let sweep = new Odd('sweep', 'png');
-let tauntaun = new Odd('tauntaun');
-let unicorn = new Odd('unicorn');
-let waterCan = new Odd('water-can');
-let wineGlass = new Odd('wine-glass');
-
-oddProductArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
-
-// ***** EASY PATH OUT OF THE WOODS ********
-if(retreivedProducts){
-oddProductArray = parsedProducts;
-} else {
-  let bag = new Odd('bag');
-let banana = new Odd('banana');
-let bathroom = new Odd('bathroom');
-let boots = new Odd('boots');
-let breakfast = new Odd('breakfast');
-let bubblegum = new Odd('bubblegum');
-let chair = new Odd('chair');
-let cthulhu = new Odd('cthulhu');
-let dogDuck = new Odd('dog-duck');
-let dragon = new Odd('dragon');
-let pen = new Odd('pen');
-let petSweep = new Odd('pet-sweep');
-let scissors = new Odd('scissors');
-let shark = new Odd('shark');
-let sweep = new Odd('sweep', 'png');
-let tauntaun = new Odd('tauntaun');
-let unicorn = new Odd('unicorn');
-let waterCan = new Odd('water-can');
-let wineGlass = new Odd('wine-glass');
-
-oddProductArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
+// ********** REBUILD PRODUCT ARRAY USING CONSTRUCTOR **********
+if (retrievedProducts) {
+  for (let i = 0; i < parsedProducts.length; i++) {
+    if (parsedProducts[i].name === 'sweep') {
+      let reconstructedSweep = new Product(parsedProducts[i].name, 'png');
+      reconstructedSweep.views = parsedProducts[i].views;
+      reconstructedSweep.votes = parsedProducts[i].votes;
+      prodArray.push(reconstructedSweep);
+    } else {
+      let reconstructedProd = new Product(parsedProducts[i].name);
+      reconstructedProd.views = parsedProducts[i].views;
+      reconstructedProd.votes = parsedProducts[i].votes;
+      prodArray.push(reconstructedProd);
+    }
+  }
 }
+else {
+  let bag = new Product('bag');
+  let banana = new Product('banana');
+  let bathroom = new Product('bathroom');
+  let boots = new Product('boots');
+  let breakfast = new Product('breakfast');
+  let bubblegum = new Product('bubblegum');
+  let chair = new Product('chair');
+  let cthulhu = new Product('cthulhu');
+  let dogDuck = new Product('dog-duck');
+  let dragon = new Product('dragon');
+  let pen = new Product('pen');
+  let petSweep = new Product('pet-sweep');
+  let scissors = new Product('scissors');
+  let shark = new Product('shark');
+  let sweep = new Product('sweep', 'png');
+  let tauntaun = new Product('tauntaun');
+  let unicorn = new Product('unicorn');
+  let waterCan = new Product('water-can');
+  let wineGlass = new Product('wine-glass');
+
+  prodArray.push(bag, banana, bathroom, boots, breakfast, bubblegum, chair, cthulhu, dogDuck, dragon, pen, petSweep, scissors, shark, sweep, tauntaun, unicorn, waterCan, wineGlass);
+}
+
 
 renderImg();
 
